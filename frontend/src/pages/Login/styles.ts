@@ -47,7 +47,7 @@ export const Link = styled(RouterLink)`
   display: block;
   margin-top: 16px;
   text-align: center;
-  background: ${(props) => props.theme.colors.primary};
+  color: ${(props) => props.theme.colors.primary};
   text-decoration: none;
   &:hover {
     text-decoration: underline;
