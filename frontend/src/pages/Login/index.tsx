@@ -10,23 +10,21 @@ import {
   LoginTitle,
 } from "./styles";
 import UserValidator from "../../validators/UserValidator";
+import DocumentValidator from "../../validators/DocumentValidator";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const createInitialDocument = async (error: string) => {
+  const createDocument = async (payload: { title: string }) => {
     try {
-      if (error.includes("Erro ao obter documento")) {
-        const docRes = await api.post("/documents", {
-          title: "Novo documento",
-        });
-        const documentId = docRes.data._id;
+      const payloadValid = await DocumentValidator.validate(payload);
+      const docRes = await api.post("/documents", payloadValid);
+      const documentId = docRes.data._id;
 
-        navigate(`/documents/${documentId}`);
-        return;
-      }
+      navigate(`/documents/${documentId}`);
+      return;
     } catch (error: any) {
       console.error(error.response.data.error);
     }
@@ -44,7 +42,13 @@ const Login: React.FC = () => {
       const documentId = docRes.data._id;
       navigate(`/documents/${documentId}`);
     } catch (error: any) {
-      await createInitialDocument(error?.response?.data?.error);
+      if (!error.includes("Erro ao obter documento")) return;
+
+      const payload = {
+        title: "Novo documento",
+      };
+
+      await createDocument(payload);
     }
   };
 
