@@ -5,6 +5,7 @@ import Editor from "../../components/Editor";
 import Preview from "../../components/Preview";
 import UserList from "../../components/UserList";
 import { DocumentPageContainer } from "./styles";
+import * as jwt_decode from "jwt-decode";
 
 let socket: Socket;
 
@@ -13,33 +14,14 @@ const DocumentPage: React.FC = () => {
   const [content, setContent] = useState(
     "# Título do Documento\n\nEste é o conteúdo do documento de exemplo."
   );
-  const [users, setUsers] = useState<Array<{ id: string; username: string }>>([
-    {
-      id: "user-1",
-      username: "Usuário Teste",
-    },
-  ]);
+  const [users, setUsers] = useState<Array<{ id: string; email: string }>>([]);
 
-  useEffect(() => {
+  const getUserIdAndToken = () => {
     const token = localStorage.getItem("token");
-    socket = io("http://localhost:5000", {
-      auth: { token },
-    });
-
-    socket.emit("join_document", { documentId: id });
-
-    socket.on("load_document", (documentContent) => {
-      setContent(documentContent);
-    });
-
-    socket.on("document_update", ({ content: updatedContent }) => {
-      setContent(updatedContent);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, [id]);
+    if (!token) throw new Error("");
+    const decodedToken = jwt_decode.jwtDecode(token as string) as any;
+    return { token, userId: decodedToken.id };
+  };
 
   const handleContentChange = (newContent: string) => {
     setContent(newContent);
@@ -47,12 +29,28 @@ const DocumentPage: React.FC = () => {
   };
 
   useEffect(() => {
-    socket.on("user_joined", ({ userId, username }) => {
-      setUsers((prevUsers) => [...prevUsers, { id: userId, username }]);
+    const token = localStorage.getItem("token");
+    const { userId } = getUserIdAndToken();
+
+    socket = io("ws://localhost:5000", {
+      auth: { token },
     });
 
-    socket.on("user_left", ({ userId }) => {
-      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+    socket.emit("join_document", { documentId: id, userId });
+
+    socket.on("load_document", (documentContent) => {
+      if (documentContent.length) return setContent(documentContent);
+      setContent(
+        "# Título do Documento\n\nEste é o conteúdo do documento de exemplo."
+      );
+    });
+
+    socket.on("document_update", ({ content: updatedContent }) => {
+      setContent(updatedContent);
+    });
+
+    socket.on("update_user_list", (userList) => {
+      setUsers(userList);
     });
 
     return () => {
