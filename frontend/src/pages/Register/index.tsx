@@ -9,24 +9,23 @@ import {
   RegisterForm,
   RegisterTitle,
 } from "./styles";
+import UserValidator from "../../validators/UserValidator";
 
 const Register: React.FC = () => {
-  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!username || !email || !password) {
-      setError("Por favor, preencha todos os campos.");
-      return;
-    }
+    const payload = { email, password };
+
+    const payloadValid = UserValidator.validate(payload);
 
     try {
-      await api.post("/auth/register", { username, email, password });
+      await api.post("/auth/register", payloadValid);
       navigate("/");
     } catch (error) {
       setError("Erro ao registrar. Tente novamente.");
@@ -39,13 +38,6 @@ const Register: React.FC = () => {
       <RegisterForm onSubmit={handleSubmit}>
         <RegisterTitle>Registrar</RegisterTitle>
         {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
-        <Input
-          type="text"
-          placeholder="Nome de usuário"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
         <Input
           type="email"
           placeholder="Email"
