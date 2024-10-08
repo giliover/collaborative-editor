@@ -1,0 +1,33 @@
+version: "3"
+services:
+  collaborative-editor-backend:
+    container_name: collaborative-editor-backend
+    image: collaborative-editor-backend
+    stdin_open: true
+    tty: true
+    entrypoint: sh -c "yarn && yarn dev"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '5000:5000'
+    volumes:
+      - .:/collaborative-editor-backend
+    environment:
+      - MONGO_URI=mongodb://root:example@mongodb:27017/?authSource=admin
+    depends_on:
+      - mongodb
+    restart: always
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./mongo-data:/data/db
+      
+
