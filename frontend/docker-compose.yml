@@ -1,0 +1,16 @@
+version: "3"
+services:
+  collaborative-editor:
+    container_name: collaborative-editor
+    image: collaborative-editor
+    stdin_open: true
+    tty: true
+    entrypoint: sh -c "yarn && yarn start"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/collaborative-editor
+    restart: always
