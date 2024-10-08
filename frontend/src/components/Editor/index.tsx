@@ -18,7 +18,7 @@ const Editor: React.FC<EditorProps> = ({ content, onChange }) => {
 
   React.useEffect(() => {
     const token = localStorage.getItem("token");
-    socket = io("http://localhost:5000", {
+    socket = io("ws://localhost:5000", {
       auth: { token },
     });
 
