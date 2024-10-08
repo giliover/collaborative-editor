@@ -1,8 +1,8 @@
 version: "3"
 services:
-  collaborative-editor:
-    container_name: collaborative-editor
-    image: collaborative-editor
+  collaborative-editor-frontend:
+    container_name: collaborative-editor-frontend
+    image: collaborative-editor-frontend
     stdin_open: true
     tty: true
     entrypoint: sh -c "yarn && yarn start"
