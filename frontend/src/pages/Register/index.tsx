@@ -22,7 +22,7 @@ const Register: React.FC = () => {
 
     const payload = { email, password };
 
-    const payloadValid = UserValidator.validate(payload);
+    const payloadValid = await UserValidator.validate(payload);
 
     try {
       await api.post("/auth/register", payloadValid);
