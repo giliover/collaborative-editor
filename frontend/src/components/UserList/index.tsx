@@ -2,7 +2,7 @@ import React from "react";
 import { UserListContainer, UserItem } from "./styles";
 
 interface UserListProps {
-  users: Array<{ id: string; username: string }>;
+  users: Array<{ id: string; email: string }>;
 }
 
 const UserList: React.FC<UserListProps> = ({ users }) => {
@@ -10,7 +10,7 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
     <UserListContainer>
       <h4>Usuários Conectados</h4>
       {users.map((user) => (
-        <UserItem key={user.id}>{user.username}</UserItem>
+        <UserItem key={user.id}>{user.email}</UserItem>
       ))}
     </UserListContainer>
   );
