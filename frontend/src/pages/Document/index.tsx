@@ -5,33 +5,31 @@ import Editor from "../../components/Editor";
 import Preview from "../../components/Preview";
 import UserList from "../../components/UserList";
 import { DocumentPageContainer } from "./styles";
-import * as jwt_decode from "jwt-decode";
+import VersionList from "../../components/VersionList ";
+import { getUserIdAndToken } from "../../global/getUserIdAndToken";
+import Sidebar from "../../components/Sidebar";
 
 let socket: Socket;
 
 const DocumentPage: React.FC = () => {
   const { id } = useParams();
+  const { userId, token } = getUserIdAndToken();
+
   const [content, setContent] = useState(
     "# Título do Documento\n\nEste é o conteúdo do documento de exemplo."
   );
   const [users, setUsers] = useState<Array<{ id: string; email: string }>>([]);
 
-  const getUserIdAndToken = () => {
-    const token = localStorage.getItem("token");
-    if (!token) throw new Error("");
-    const decodedToken = jwt_decode.jwtDecode(token as string) as any;
-    return { token, userId: decodedToken.id };
-  };
-
   const handleContentChange = (newContent: string) => {
     setContent(newContent);
-    socket.emit("document_change", { documentId: id, content: newContent });
+    socket.emit("document_change", {
+      documentId: id,
+      content: newContent,
+      userId,
+    });
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const { userId } = getUserIdAndToken();
-
     socket = io("ws://localhost:5000", {
       auth: { token },
     });
@@ -56,13 +54,27 @@ const DocumentPage: React.FC = () => {
     return () => {
       socket.disconnect();
     };
-  }, [id]);
+  }, [id, token, userId]);
+
+  const handleRevert = (content: string) => {
+    socket = io("ws://localhost:5000", {
+      auth: { token },
+    });
+    const { userId } = getUserIdAndToken();
+
+    setContent(content);
+    socket.emit("document_change", { documentId: id, content, userId });
+  };
 
   return (
     <DocumentPageContainer>
+      <Sidebar
+        version={() => <VersionList documentId={id!} onRevert={handleRevert} />}
+        user={() => <UserList users={users} />}
+      />
+
       <Editor content={content} onChange={handleContentChange} />
       <Preview content={content} />
-      <UserList users={users} />
     </DocumentPageContainer>
   );
 };
