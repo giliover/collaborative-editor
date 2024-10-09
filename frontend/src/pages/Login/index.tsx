@@ -11,13 +11,18 @@ import {
 } from "./styles";
 import UserValidator from "../../validators/UserValidator";
 import DocumentValidator from "../../validators/DocumentValidator";
+import { getUserIdAndToken } from "../../global/getUserIdAndToken";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const createDocument = async (payload: { title: string }) => {
+  const createDocument = async (payload: {
+    title: string;
+    content: string;
+    userId: string;
+  }) => {
     try {
       const payloadValid = await DocumentValidator.validate(payload);
       const docRes = await api.post("/documents", payloadValid);
@@ -42,10 +47,16 @@ const Login: React.FC = () => {
       const documentId = docRes.data._id;
       navigate(`/documents/${documentId}`);
     } catch (error: any) {
-      if (!error.includes("Erro ao obter documento")) return;
+      const message = error?.response?.data?.error;
+      if (!message?.includes("Erro ao obter documento")) return;
+
+      const { userId } = getUserIdAndToken();
 
       const payload = {
         title: "Novo documento",
+        content:
+          "# Título do Documento\n\nEste é o conteúdo do documento de exemplo.",
+        userId,
       };
 
       await createDocument(payload);
