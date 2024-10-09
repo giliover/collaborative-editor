@@ -80,9 +80,27 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("document_change", async ({ documentId, content }) => {
-    await Document.findByIdAndUpdate(documentId, { content });
-    socket.to(documentId).emit("document_update", { content });
+  socket.on("document_change", async ({ documentId, content, userId }) => {
+    if (!mongoose.Types.ObjectId.isValid(documentId)) {
+      socket.emit("error", "ID de documento inválido");
+      return;
+    }
+
+    const document = await Document.findById(documentId);
+    if (document) {
+      document.versions.push({
+        content: document.content,
+        author: userId,
+        timestamp: new Date(),
+      });
+
+      document.content = content;
+      await document.save();
+
+      socket.to(documentId).emit("document_update", { content });
+    } else {
+      socket.emit("error", "Documento não encontrado");
+    }
   });
 });
 
