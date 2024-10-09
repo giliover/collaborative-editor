@@ -1,5 +1,5 @@
 import React from "react";
-import { UserListContainer, UserItem } from "./styles";
+import { UserListContainer, UserItem, Title } from "./styles";
 
 interface UserListProps {
   users: Array<{ id: string; email: string }>;
@@ -8,7 +8,7 @@ interface UserListProps {
 const UserList: React.FC<UserListProps> = ({ users }) => {
   return (
     <UserListContainer>
-      <h4>Usuários Conectados</h4>
+      <Title>Usuários Conectados</Title>
       {users.map((user) => (
         <UserItem key={user.id}>{user.email}</UserItem>
       ))}

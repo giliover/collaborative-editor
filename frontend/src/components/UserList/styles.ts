@@ -1,17 +1,29 @@
 import styled from "styled-components";
 
 export const UserListContainer = styled.div`
-  position: fixed;
-  right: 0;
-  bottom: 10px;
-  right: 10px;
-  background: ${(props) => props.theme.colors.white};
+  height: 100vh;
+  width: 30rem;
+  overflow-y: scroll;
   padding: 16px;
-  border-bottom-left-radius: 8px;
-  box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.1);
+  background: ${({ theme }) => theme.colors.white};
+  border-radius: 8px;
+  position: absolute;
+  top: 0;
+  right: 50px;
 `;
 
 export const UserItem = styled.div`
-  margin-bottom: 8px;
-  font-size: 14px;
+  margin: 8px 0;
+  padding: 10px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: ${({ theme }) => theme.colors.background};
+`;
+
+export const Title = styled.h3`
+  margin-bottom: 16px;
+  color: ${({ theme }) => theme.colors.primary};
 `;
