@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - '5000:5000'
+      - '5000:3000'
     volumes:
       - .:/collaborative-editor-backend
     environment:

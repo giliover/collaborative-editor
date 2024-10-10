@@ -1,7 +1,6 @@
 import { Router, Response, Request } from "express";
 import { authenticateToken } from "../middlewares/auth";
 import Document from "../models/Document";
-import User from "../models/User";
 
 const router = Router();
 

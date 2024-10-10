@@ -1,4 +1,4 @@
-FROM node:current-alpine
+FROM node:current
 
 ENV APP_PATH /collaborative-editor-backend
 
@@ -7,8 +7,8 @@ WORKDIR $APP_PATH
 
 COPY package.json ./
 
-RUN apk update && \
-apk add git && \
+RUN apt update && \
+apt install -y git curl gnupg build-essential python3 && \
 npm install -g npm@latest
 
 EXPOSE 5000
