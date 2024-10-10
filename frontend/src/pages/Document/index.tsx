@@ -5,7 +5,7 @@ import Editor from "../../components/Editor";
 import Preview from "../../components/Preview";
 import UserList from "../../components/UserList";
 import { DocumentPageContainer } from "./styles";
-import VersionList from "../../components/VersionList ";
+import VersionList from "../../components/VersionList";
 import { getUserIdAndToken } from "../../global/getUserIdAndToken";
 import Sidebar from "../../components/Sidebar";
 
