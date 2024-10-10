@@ -1,0 +1,31 @@
+const { override, addBabelPlugin } = require("customize-cra");
+
+module.exports = override(
+  addBabelPlugin([
+    "babel-plugin-root-import",
+    {
+      paths: [
+        {
+          rootPathPrefix: "@/",
+          rootPathSuffix: "src/",
+        },
+        {
+          rootPathPrefix: "@global/",
+          rootPathSuffix: "src/global/",
+        },
+        {
+          rootPathPrefix: "@services/",
+          rootPathSuffix: "src/services/",
+        },
+        {
+          rootPathPrefix: "@pages/",
+          rootPathSuffix: "src/pages/",
+        },
+        {
+          rootPathPrefix: "@components/",
+          rootPathSuffix: "src/components/",
+        },
+      ],
+    },
+  ])
+);

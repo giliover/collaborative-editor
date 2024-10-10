@@ -14,7 +14,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"],
+      "@services/*": ["services/*"],
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@validators/*": ["validators/*"],
+      "@global/*": ["global/*"]
+    }
   },
   "typeRoots": ["./types", "./node_modules/@types"],
   "baseUrl": "src",
