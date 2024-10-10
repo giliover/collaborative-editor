@@ -3,11 +3,11 @@
 
 import React, { act } from "react";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
-import VersionList from "../../src/components/VersionList";
-import api from "../../src/services/api";
-import { getUserIdAndToken } from "../../src/global/getUserIdAndToken";
 import { ThemeProvider } from "styled-components";
+import "@testing-library/jest-dom/extend-expect";
+import VersionList from "@components/VersionList";
+import api from "@services/api";
+import { getUserIdAndToken } from "@global/getUserIdAndToken";
 
 jest.mock("../../src/services/api");
 jest.mock("../../src/global/getUserIdAndToken");

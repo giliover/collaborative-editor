@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
-import Editor from "../../components/Editor";
-import Preview from "../../components/Preview";
-import UserList from "../../components/UserList";
+import Editor from "@components/Editor";
+import Preview from "@components/Preview";
+import UserList from "@components/UserList";
 import { DocumentPageContainer } from "./styles";
-import VersionList from "../../components/VersionList";
-import { getUserIdAndToken } from "../../global/getUserIdAndToken";
-import Sidebar from "../../components/Sidebar";
+import VersionList from "@components/VersionList";
+import { getUserIdAndToken } from "@global/getUserIdAndToken";
+import Sidebar from "@components/Sidebar";
 
 let socket: Socket;
 

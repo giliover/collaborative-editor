@@ -2,7 +2,7 @@
 import React, { act } from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import UserList from "../../src/components/UserList";
+import UserList from "@components/UserList";
 import { ThemeProvider } from "styled-components";
 
 const theme = {

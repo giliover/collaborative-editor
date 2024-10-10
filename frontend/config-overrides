@@ -18,6 +18,10 @@ module.exports = override(
           rootPathSuffix: "src/services/",
         },
         {
+          rootPathPrefix: "@validators/",
+          rootPathSuffix: "src/validators/",
+        },
+        {
           rootPathPrefix: "@pages/",
           rootPathSuffix: "src/pages/",
         },

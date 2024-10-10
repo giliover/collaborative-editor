@@ -2,7 +2,7 @@
 import React, { act } from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import Preview from "../../src/components/Preview";
+import Preview from "@components/Preview";
 import { ThemeProvider } from "styled-components";
 
 const theme = {

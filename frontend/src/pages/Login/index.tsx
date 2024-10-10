@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../services/api";
+import api from "@services/api";
 import {
   Button,
   Input,
@@ -9,9 +9,9 @@ import {
   LoginForm,
   LoginTitle,
 } from "./styles";
-import UserValidator from "../../validators/UserValidator";
-import DocumentValidator from "../../validators/DocumentValidator";
-import { getUserIdAndToken } from "../../global/getUserIdAndToken";
+import UserValidator from "@validators/UserValidator";
+import DocumentValidator from "@validators/DocumentValidator";
+import { getUserIdAndToken } from "@global/getUserIdAndToken";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");

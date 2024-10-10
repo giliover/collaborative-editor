@@ -6,8 +6,8 @@ import {
   Title,
   VersionItem,
 } from "./styles";
-import api from "../../services/api";
-import { getUserIdAndToken } from "../../global/getUserIdAndToken";
+import api from "@services/api";
+import { getUserIdAndToken } from "@global/getUserIdAndToken";
 
 interface Version {
   _id: string;

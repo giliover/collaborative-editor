@@ -9,13 +9,14 @@ module.exports = {
     "^.+\\.(js|jsx)$": "babel-jest",
     ".+\\.(png|scss|ttf)$": "<rootDir>/node_modules/jest-transform-stub",
   },
+
   transformIgnorePatterns: [
     "<rootDir>/node_modules/",
     "node_modules/(?!react-markdown)",
     "node_modules/(?!axios)",
   ],
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
   testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.tsx?$",
   moduleDirectories: ["node_modules", "<rootDir>/src"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "ttf"],

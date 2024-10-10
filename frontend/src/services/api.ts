@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { getUserIdAndToken } from "../global/getUserIdAndToken";
+import { getUserIdAndToken } from "@global/getUserIdAndToken";
 
 const authorizationInterceptor: any = async (config: AxiosRequestConfig) => {
   if (!config.headers?.Authorization) {

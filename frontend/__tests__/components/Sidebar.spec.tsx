@@ -2,7 +2,7 @@
 import React, { act } from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import Sidebar from "../../src/components/Sidebar";
+import Sidebar from "@components/Sidebar";
 import { ThemeProvider } from "styled-components";
 
 const MockVersion = () => <div>Version Component</div>;

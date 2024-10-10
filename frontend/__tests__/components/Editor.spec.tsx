@@ -3,7 +3,7 @@ import React, { act } from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { io } from "socket.io-client";
-import Editor from "../../src/components/Editor";
+import Editor from "@components/Editor";
 
 jest.mock("socket.io-client");
 

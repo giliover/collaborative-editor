@@ -3,12 +3,9 @@
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -25,7 +22,7 @@
       "@global/*": ["global/*"]
     }
   },
-  "typeRoots": ["./types", "./node_modules/@types"],
+  "typeRoots": ["./node_modules/@types"],
   "baseUrl": "src",
-  "include": ["src", "jest.config.js"]
+  "include": ["src", "__tests__", "jest.config.js"]
 }
