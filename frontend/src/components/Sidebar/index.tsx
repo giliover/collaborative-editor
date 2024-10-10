@@ -25,10 +25,10 @@ const Sidebar = ({
   return (
     <SidebarContainer>
       <IconContainer>
-        <IconButton onClick={handleHistoryClick}>
+        <IconButton onClick={handleHistoryClick} aria-label="history">
           <FaHistory />
         </IconButton>
-        <IconButton onClick={handleUsersClick}>
+        <IconButton onClick={handleUsersClick} aria-label="users">
           <FaUsers />
         </IconButton>
       </IconContainer>
