@@ -6,9 +6,9 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
-    "test": "jest --config jest.config.js",
-    "test:watch": "jest --config jest.config.js --watch",
-    "test:coverage": "jest --config jest.config.js --coverage"
+    "test": "jest --config jest.config.js --maxWorkers=50%",
+    "test:watch": "jest --config jest.config.js --maxWorkers=25% --watch",
+    "test:coverage": "jest --config jest.config.js --maxWorkers=25% --coverage"
   },
   "keywords": [],
   "author": "",

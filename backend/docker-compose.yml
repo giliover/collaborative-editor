@@ -9,12 +9,16 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    networks:
+      - collaborative-editor
     ports:
-      - '5000:3000'
+      - "5000:3000"
     volumes:
       - .:/collaborative-editor-backend
     environment:
       - MONGO_URI=mongodb://root:example@mongodb:27017/?authSource=admin
+      - JWT_SECRET="robqbaçlnv,mcnv,snl!(*$#&$(#KSAKJFDBkj))OIASHFIDH&*&A*SD"
+      - PORT=3000
     depends_on:
       - mongodb
     restart: always
@@ -25,9 +29,12 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - collaborative-editor
     ports:
       - '27017:27017'
     volumes:
       - ./mongo-data:/data/db
-      
-
+networks:
+  collaborative-editor:
+    driver: bridge

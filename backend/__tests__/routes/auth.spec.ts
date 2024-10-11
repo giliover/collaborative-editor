@@ -78,54 +78,59 @@ describe("Auth Routes", () => {
       };
 
       const req = request(app);
-      const userRegistered = await req.post("/api/auth/register").send(payload);
 
+      const userRegistered = await req.post("/api/auth/register").send(payload);
       expect(userRegistered.status).toBe(201);
 
-      const loginRes = await req.post("/api/auth/login").send(payload);
+      const mockComparePassword = jest.spyOn(User.prototype, "comparePassword");
+      mockComparePassword.mockResolvedValue(true);
 
+      const loginRes = await req.post("/api/auth/login").send(payload);
       expect(loginRes.status).toBe(200);
       expect(loginRes.body.token).toBeDefined();
     });
-  });
 
-  it("should return 400 if credentials are invalid (wrong password)", async () => {
-    const user = new User({
-      email: "login@example.com",
-      password: "password123",
-    });
-    await user.save();
+    it("should return 400 if credentials are invalid (wrong password)", async () => {
+      const user = new User({
+        email: "login@example.com",
+        password: "password123",
+      });
+      await user.save();
 
-    const res = await request(app).post("/api/auth/login").send({
-      email: "login@example.com",
-      password: "wrongpassword",
-    });
+      const mockComparePassword = jest.spyOn(User.prototype, "comparePassword");
+      mockComparePassword.mockResolvedValue(false);
 
-    expect(res.status).toBe(400);
-    expect(res.body.error).toBe("Credenciais inválidas");
-  });
+      const res = await request(app).post("/api/auth/login").send({
+        email: "login@example.com",
+        password: "wrongpassword",
+      });
 
-  it("should return 400 if user does not exist", async () => {
-    const res = await request(app).post("/api/auth/login").send({
-      email: "nonexistent@example.com",
-      password: "password123",
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe("Credenciais inválidas");
     });
 
-    expect(res.status).toBe(400);
-    expect(res.body.error).toBe("Credenciais inválidas");
-  });
+    it("should return 400 if user does not exist", async () => {
+      const res = await request(app).post("/api/auth/login").send({
+        email: "nonexistent@example.com",
+        password: "password123",
+      });
 
-  it("should return 500 if there is an error during authentication", async () => {
-    jest.spyOn(User, "findOne").mockImplementationOnce(() => {
-      throw new Error("Erro ao autenticar usuário");
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe("Credenciais inválidas");
     });
 
-    const res = await request(app).post("/api/auth/login").send({
-      email: "login@example.com",
-      password: "password123",
-    });
+    it("should return 500 if there is an error during authentication", async () => {
+      jest.spyOn(User, "findOne").mockImplementationOnce(() => {
+        throw new Error("Erro ao autenticar usuário");
+      });
 
-    expect(res.status).toBe(500);
-    expect(res.body.error).toBe("Erro ao autenticar usuário");
+      const res = await request(app).post("/api/auth/login").send({
+        email: "login@example.com",
+        password: "password123",
+      });
+
+      expect(res.status).toBe(500);
+      expect(res.body.error).toBe("Erro ao autenticar usuário");
+    });
   });
 });

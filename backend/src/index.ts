@@ -30,11 +30,15 @@ app.use("/api/documents", documentRoutes);
 io.on("connection", (socket) => {
   console.log("Um usuário se conectou:", socket.id);
 
-  socket.on("join_document", async ({ documentId, userId }) => {
+  const validateDocumentId = (documentId: string) => {
     if (!mongoose.Types.ObjectId.isValid(documentId)) {
       socket.emit("error", "ID de documento inválido");
-      return;
+      throw "";
     }
+  };
+
+  socket.on("join_document", async ({ documentId, userId }) => {
+    validateDocumentId(documentId);
 
     socket.join(documentId);
 
@@ -81,10 +85,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("document_change", async ({ documentId, content, userId }) => {
-    if (!mongoose.Types.ObjectId.isValid(documentId)) {
-      socket.emit("error", "ID de documento inválido");
-      return;
-    }
+    validateDocumentId(documentId);
 
     const document = await Document.findById(documentId);
     if (document) {
@@ -102,6 +103,23 @@ io.on("connection", (socket) => {
       socket.emit("error", "Documento não encontrado");
     }
   });
+
+  socket.on(
+    "user_typing",
+    async ({ positionStart, positionEnd, userId, documentId }) => {
+      validateDocumentId(documentId);
+      const sockets = await io.in(documentId).fetchSockets();
+      for (let index = 0; index < sockets.length; index++) {
+        const element = sockets[index];
+        element.emit("user_selection", {
+          positionStart,
+          positionEnd,
+          userId,
+          documentId,
+        });
+      }
+    }
+  );
 });
 
 const PORT = process.env.PORT || 5000;
