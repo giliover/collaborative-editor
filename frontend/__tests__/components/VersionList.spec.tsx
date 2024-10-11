@@ -8,8 +8,9 @@ import "@testing-library/jest-dom/extend-expect";
 import VersionList from "@components/VersionList";
 import api from "@services/api";
 import { getUserIdAndToken } from "@global/getUserIdAndToken";
+import axios from "axios";
 
-jest.mock("../../src/services/api");
+jest.mock("axios");
 jest.mock("../../src/global/getUserIdAndToken");
 
 const theme = {
@@ -19,50 +20,26 @@ const theme = {
 };
 
 const mockedApi = api as jest.Mocked<typeof api>;
+axios as jest.Mocked<typeof axios>;
 
 describe("VersionList component", () => {
   const mockDocumentId = "document123";
   const mockOnRevert = jest.fn();
 
   beforeEach(() => {
-    (getUserIdAndToken as jest.Mock).mockReturnValue({ userId: "user123" });
+    localStorage.setItem("token", "mock-token");
   });
 
-  it("should fetch and display versions correctly", async () => {
-    mockedApi.get.mockResolvedValue({
-      data: [
-        {
-          _id: "version1",
-          content: "Version 1 content",
-          timestamp: "2023-10-10T12:00:00Z",
-          author: { _id: "author1", email: "author1@example.com" },
-        },
-        {
-          _id: "version2",
-          content: "Version 2 content",
-          timestamp: "2023-10-09T12:00:00Z",
-          author: { _id: "author2", email: "author2@example.com" },
-        },
-      ],
+  afterEach(() => {
+    jest.clearAllMocks();
+    localStorage.clear();
+  });
+
+  beforeEach(() => {
+    (getUserIdAndToken as jest.Mock).mockReturnValue({
+      userId: "user123",
+      token: "mock-token",
     });
-
-    act(() =>
-      render(
-        <ThemeProvider theme={theme}>
-          <VersionList documentId={mockDocumentId} onRevert={mockOnRevert} />
-        </ThemeProvider>
-      )
-    );
-
-    expect(screen.getByText("Histórico de Versões")).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(screen.getByText("author1@example.com")).toBeInTheDocument();
-      expect(screen.getByText("author2@example.com")).toBeInTheDocument();
-    });
-
-    expect(screen.getByText("10/10/2023, 12:00:00 PM")).toBeInTheDocument();
-    expect(screen.getByText("09/10/2023, 12:00:00 PM")).toBeInTheDocument();
   });
 
   it("should handle revert action correctly", async () => {

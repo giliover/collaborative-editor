@@ -25,14 +25,20 @@ interface VersionListProps {
 }
 
 const VersionList: React.FC<VersionListProps> = ({ documentId, onRevert }) => {
-  const [versions, setVersions] = useState<Version[]>([]);
   const { userId } = getUserIdAndToken();
+  const [versions, setVersions] = useState<Version[]>([]);
+  const [lastRevertion, setLastRevertion] = useState("");
 
   useEffect(() => {
     const fetchVersions = async () => {
       try {
         const res = await api.get(`/documents/${documentId}/versions`);
-        setVersions(res.data);
+        setVersions(
+          res.data.sort(
+            (a: Version, b: Version) =>
+              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          )
+        );
       } catch (error) {
         console.error("Erro ao obter versões:", error);
       }
@@ -47,11 +53,16 @@ const VersionList: React.FC<VersionListProps> = ({ documentId, onRevert }) => {
         `/documents/${documentId}/versions/${versionId}/revert`,
         { userId }
       );
+
+      setLastRevertion(versionId);
       onRevert(res.data.content);
     } catch (error) {
       console.error("Erro ao reverter documento:", error);
     }
   };
+
+  const getButtonText = (id: string) =>
+    id === lastRevertion ? "Revertido" : "Reverter";
 
   return (
     <ListContainer>
@@ -70,7 +81,7 @@ const VersionList: React.FC<VersionListProps> = ({ documentId, onRevert }) => {
               </p>
             </AuthorInfo>
             <RevertButton onClick={() => handleRevert(version._id)}>
-              Reverter
+              {getButtonText(version._id)}
             </RevertButton>
           </VersionItem>
         ))}
