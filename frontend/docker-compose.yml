@@ -14,3 +14,8 @@ services:
     volumes:
       - .:/collaborative-editor
     restart: always
+    networks:
+      - collaborative-editor
+networks:
+  collaborative-editor:
+    driver: bridge
