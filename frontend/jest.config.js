@@ -16,7 +16,10 @@ module.exports = {
     "node_modules/(?!axios)",
   ],
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
+  setupFilesAfterEnv: [
+    "<rootDir>/src/setupTests.ts",
+    "<rootDir>/__tests__/setup.js",
+  ],
   testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.tsx?$",
   moduleDirectories: ["node_modules", "<rootDir>/src"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "ttf"],
